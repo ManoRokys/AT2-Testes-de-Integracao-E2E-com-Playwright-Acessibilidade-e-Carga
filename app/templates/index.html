@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sistema de Agendamento de Consultas Médicas - ClinicaMed. Interface acessível WCAG 2.1 AA.">
+  <title>ClinicaMed - Agendamento de Consultas Médicas</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <!-- Link de atalho para usuários de leitores de tela e teclado -->
+  <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
+
+  <header role="banner">
+    <div class="header-container">
+      <div>
+        <h1 class="header-title">ClinicaMed</h1>
+        <p class="header-subtitle">Sistema Integrado de Agendamento de Consultas Médicas</p>
+      </div>
+      <div>
+        <span class="badge-wcag" role="status">Acessibilidade WCAG 2.1 AA</span>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content" role="main">
+    <!-- Região viva para anúncios de leitores de tela e mensagens de status -->
+    <div id="alert-status" role="status" aria-live="polite" class="alert"></div>
+
+    <div class="grid-layout">
+      <!-- Coluna 1: Formulário de Agendamento -->
+      <section class="card" aria-labelledby="form-heading">
+        <h2 id="form-heading">Agendar Consulta</h2>
+        <form id="form-agendamento" novalidate>
+          <div class="form-group">
+            <label for="paciente_nome">
+              Nome Completo <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="paciente_nome" 
+              name="paciente_nome" 
+              required 
+              aria-required="true" 
+              autocomplete="name"
+              aria-describedby="nome-help"
+              placeholder="Ex: Carlos Eduardo de Souza"
+            >
+            <div id="nome-help" class="help-text">Informe nome e sobrenome do paciente.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="paciente_email">
+              E-mail <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input 
+              type="email" 
+              id="paciente_email" 
+              name="paciente_email" 
+              required 
+              aria-required="true" 
+              autocomplete="email"
+              aria-describedby="email-help"
+              placeholder="paciente@exemplo.com.br"
+            >
+            <div id="email-help" class="help-text">O comprovante será enviado a este endereço.</div>
+          </div>
+
+          <div class="form-group">
+            <label for="paciente_telefone">
+              Telefone <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input 
+              type="tel" 
+              id="paciente_telefone" 
+              name="paciente_telefone" 
+              required 
+              aria-required="true" 
+              autocomplete="tel"
+              placeholder="(11) 98765-4321"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="especialidade">
+              Especialidade Médica <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <select id="especialidade" name="especialidade" required aria-required="true">
+              {% for esp in especialidades %}
+                <option value="{{ esp }}">{{ esp }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="data_horario">
+              Data e Horário <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="data_horario" 
+              name="data_horario" 
+              required 
+              aria-required="true"
+              aria-describedby="data-help"
+              placeholder="Ex: 2026-11-20T14:30"
+            >
+            <div id="data-help" class="help-text">Formato: AAAA-MM-DDTHH:mm</div>
+          </div>
+
+          <div class="form-group">
+            <label for="observacoes">Observações</label>
+            <textarea 
+              id="observacoes" 
+              name="observacoes" 
+              rows="3" 
+              placeholder="Histórico prévio, sintomas ou necessidades especiais..."
+            ></textarea>
+          </div>
+
+          <button type="submit" id="btn-submit" class="btn-primary">
+            Confirmar Agendamento
+          </button>
+        </form>
+      </section>
+
+      <!-- Coluna 2: Tabela de Consultas Agendadas -->
+      <section class="card" aria-labelledby="tabela-heading">
+        <h2 id="tabela-heading">Consultas Cadastradas</h2>
+        
+        <div class="table-responsive">
+          <table aria-label="Lista de Consultas Médicas Agendadas">
+            <caption>Relação cronológica de consultas agendadas na clínica</caption>
+            <thead>
+              <tr>
+                <th scope="col">Paciente</th>
+                <th scope="col">Especialidade</th>
+                <th scope="col">Data/Horário</th>
+                <th scope="col">Status</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabela-agendamentos-body">
+              {% if agendamentos %}
+                {% for item in agendamentos %}
+                  <tr id="row-{{ item.id }}">
+                    <td><strong>{{ item.paciente_nome }}</strong></td>
+                    <td>{{ item.especialidade.value }}</td>
+                    <td>{{ item.data_horario.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td><span class="badge badge-{{ item.status.value }}">{{ item.status.value }}</span></td>
+                    <td>
+                      {% if item.status.value != 'CANCELADO' %}
+                        <button type="button" class="btn-cancel" data-id="{{ item.id }}" aria-label="Cancelar agendamento de {{ item.paciente_nome }}">
+                          Cancelar
+                        </button>
+                      {% else %}
+                        <span>-</span>
+                      {% endif %}
+                    </td>
+                  </tr>
+                {% endfor %}
+              {% endif %}
+            </tbody>
+          </table>
+          {% if not agendamentos %}
+            <p id="empty-state" style="text-align: center; color: var(--color-text-muted); margin-top: 1rem;">
+              Nenhum agendamento cadastrado no momento.
+            </p>
+          {% endif %}
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <footer role="contentinfo">
+    <p>ClinicaMed &copy; 2026 - Qualidade e Teste de Software (QTS) - FATEC Registro</p>
+  </footer>
+
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
+

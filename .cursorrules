@@ -1,0 +1,12 @@
+# Regras de Contexto Cursor e AI Coding Assistants
+# Projeto: ClinicaMed - QTS FATEC Registro (AT2)
+
+- Stack: Python 3.12+, FastAPI, Pydantic v2, uv, Pytest, Playwright, Axe-core, Locust.
+- Sempre use o gerenciador de pacotes 'uv'.
+- Testes de integração devem usar @pytest.mark.integration, padrão AAA explícito e mocker.patch para app.services.notification.ExternalNotificationClient.
+- Testes E2E devem usar @pytest.mark.e2e, Page Object Model (POM) e seletores semânticos (get_by_role, get_by_label, get_by_text).
+- Testes de acessibilidade devem usar @pytest.mark.accessibility, axe-playwright-python e validação de teclado com to_be_focused().
+- Testes de carga devem usar locustfile.py com HttpUser e tarefas @task.
+- Massa de dados sintéticos gerada via Faker("pt_BR") estruturada em Factory Pattern.
+- Conformidade estrita com ISO/IEC 25010 e WCAG 2.1 AA.
+
