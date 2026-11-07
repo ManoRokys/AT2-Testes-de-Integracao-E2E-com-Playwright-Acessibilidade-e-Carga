@@ -3,19 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Sistema de Agendamento de Consultas Médicas - ClinicaMed. Interface acessível WCAG 2.1 AA.">
-  <title>ClinicaMed - Agendamento de Consultas Médicas</title>
+  <meta name="description" content="AutoCar - Sistema de Agendamento de Revisão Automotiva. Interface acessível WCAG 2.1 AA.">
+  <title>AutoCar - Agendamento de Revisão Automotiva</title>
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
-  <!-- Link de atalho para usuários de leitores de tela e teclado -->
   <a href="#main-content" class="skip-link">Pular para o conteúdo principal</a>
 
   <header role="banner">
     <div class="header-container">
       <div>
-        <h1 class="header-title">ClinicaMed</h1>
-        <p class="header-subtitle">Sistema Integrado de Agendamento de Consultas Médicas</p>
+        <h1 class="header-title">AutoCar Oficina Mecânica</h1>
+        <p class="header-subtitle">Agendamento de Manutenção, Revisão e Serviços Automotivos</p>
       </div>
       <div>
         <span class="badge-wcag" role="status">Acessibilidade WCAG 2.1 AA</span>
@@ -24,70 +23,97 @@
   </header>
 
   <main id="main-content" role="main">
-    <!-- Região viva para anúncios de leitores de tela e mensagens de status -->
     <div id="alert-status" role="status" aria-live="polite" class="alert"></div>
 
     <div class="grid-layout">
-      <!-- Coluna 1: Formulário de Agendamento -->
+      <!-- Formulário de Agendamento do Veículo -->
       <section class="card" aria-labelledby="form-heading">
-        <h2 id="form-heading">Agendar Consulta</h2>
-        <form id="form-agendamento" novalidate>
+        <h2 id="form-heading">Agendar Serviço</h2>
+        <form id="form-revisao" novalidate>
           <div class="form-group">
-            <label for="paciente_nome">
-              Nome Completo <span class="required-mark" aria-hidden="true">*</span>
+            <label for="cliente_nome">
+              Nome do Cliente <span class="required-mark" aria-hidden="true">*</span>
             </label>
             <input 
               type="text" 
-              id="paciente_nome" 
-              name="paciente_nome" 
+              id="cliente_nome" 
+              name="cliente_nome" 
               required 
-              aria-required="true" 
+              aria-required="true"
               autocomplete="name"
               aria-describedby="nome-help"
-              placeholder="Ex: Carlos Eduardo de Souza"
+              placeholder="Ex: Lucas Silva"
             >
-            <div id="nome-help" class="help-text">Informe nome e sobrenome do paciente.</div>
+            <div id="nome-help" class="help-text">Informe nome e sobrenome do proprietário.</div>
           </div>
 
           <div class="form-group">
-            <label for="paciente_email">
+            <label for="cliente_email">
               E-mail <span class="required-mark" aria-hidden="true">*</span>
             </label>
             <input 
               type="email" 
-              id="paciente_email" 
-              name="paciente_email" 
+              id="cliente_email" 
+              name="cliente_email" 
               required 
-              aria-required="true" 
+              aria-required="true"
               autocomplete="email"
-              aria-describedby="email-help"
-              placeholder="paciente@exemplo.com.br"
+              placeholder="cliente@exemplo.com.br"
             >
-            <div id="email-help" class="help-text">O comprovante será enviado a este endereço.</div>
           </div>
 
           <div class="form-group">
-            <label for="paciente_telefone">
+            <label for="cliente_telefone">
               Telefone <span class="required-mark" aria-hidden="true">*</span>
             </label>
             <input 
               type="tel" 
-              id="paciente_telefone" 
-              name="paciente_telefone" 
+              id="cliente_telefone" 
+              name="cliente_telefone" 
               required 
-              aria-required="true" 
+              aria-required="true"
               autocomplete="tel"
-              placeholder="(11) 98765-4321"
+              placeholder="(13) 99876-5432"
             >
           </div>
 
           <div class="form-group">
-            <label for="especialidade">
-              Especialidade Médica <span class="required-mark" aria-hidden="true">*</span>
+            <label for="veiculo_modelo">
+              Modelo do Carro <span class="required-mark" aria-hidden="true">*</span>
             </label>
-            <select id="especialidade" name="especialidade" required aria-required="true">
-              {% for esp in especialidades %}
-                <option value="{{ esp }}">{{ esp }}</option>
+            <input 
+              type="text" 
+              id="veiculo_modelo" 
+              name="veiculo_modelo" 
+              required 
+              aria-required="true"
+              placeholder="Ex: Volkswagen Gol 1.6 ou Honda Civic"
+            >
+          </div>
+
+          <div class="form-group">
+            <label for="veiculo_placa">
+              Placa do Veículo <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <input 
+              type="text" 
+              id="veiculo_placa" 
+              name="veiculo_placa" 
+              required 
+              aria-required="true"
+              placeholder="Ex: BRA2E19"
+              aria-describedby="placa-help"
+            >
+            <div id="placa-help" class="help-text">Formato padrão ou placa Mercosul (7 caracteres).</div>
+          </div>
+
+          <div class="form-group">
+            <label for="tipo_servico">
+              Tipo de Serviço <span class="required-mark" aria-hidden="true">*</span>
+            </label>
+            <select id="tipo_servico" name="tipo_servico" required aria-required="true">
+              {% for serv in servicos %}
+                <option value="{{ serv }}">{{ serv }}</option>
               {% endfor %}
             </select>
           </div>
@@ -103,18 +129,18 @@
               required 
               aria-required="true"
               aria-describedby="data-help"
-              placeholder="Ex: 2026-11-20T14:30"
+              placeholder="Ex: 2026-11-20T09:00"
             >
             <div id="data-help" class="help-text">Formato: AAAA-MM-DDTHH:mm</div>
           </div>
 
           <div class="form-group">
-            <label for="observacoes">Observações</label>
+            <label for="observacoes">Observações do Veículo</label>
             <textarea 
               id="observacoes" 
               name="observacoes" 
               rows="3" 
-              placeholder="Histórico prévio, sintomas ou necessidades especiais..."
+              placeholder="Barulhos no motor, quilometragem atual ou histórico..."
             ></textarea>
           </div>
 
@@ -124,33 +150,35 @@
         </form>
       </section>
 
-      <!-- Coluna 2: Tabela de Consultas Agendadas -->
+      <!-- Tabela de Serviços e Revisões Cadastradas -->
       <section class="card" aria-labelledby="tabela-heading">
-        <h2 id="tabela-heading">Consultas Cadastradas</h2>
+        <h2 id="tabela-heading">Revisões Agendadas</h2>
         
         <div class="table-responsive">
-          <table aria-label="Lista de Consultas Médicas Agendadas">
-            <caption>Relação cronológica de consultas agendadas na clínica</caption>
+          <table aria-label="Lista de Revisões Automotivas Agendadas">
+            <caption>Agendamentos registrados na oficina</caption>
             <thead>
               <tr>
-                <th scope="col">Paciente</th>
-                <th scope="col">Especialidade</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Veículo / Placa</th>
+                <th scope="col">Serviço</th>
                 <th scope="col">Data/Horário</th>
                 <th scope="col">Status</th>
                 <th scope="col">Ações</th>
               </tr>
             </thead>
-            <tbody id="tabela-agendamentos-body">
-              {% if agendamentos %}
-                {% for item in agendamentos %}
+            <tbody id="tabela-revisoes-body">
+              {% if revisoes %}
+                {% for item in revisoes %}
                   <tr id="row-{{ item.id }}">
-                    <td><strong>{{ item.paciente_nome }}</strong></td>
-                    <td>{{ item.especialidade.value }}</td>
+                    <td><strong>{{ item.cliente_nome }}</strong></td>
+                    <td>{{ item.veiculo_modelo }} ({{ item.veiculo_placa }})</td>
+                    <td>{{ item.tipo_servico.value }}</td>
                     <td>{{ item.data_horario.strftime('%d/%m/%Y %H:%M') }}</td>
                     <td><span class="badge badge-{{ item.status.value }}">{{ item.status.value }}</span></td>
                     <td>
                       {% if item.status.value != 'CANCELADO' %}
-                        <button type="button" class="btn-cancel" data-id="{{ item.id }}" aria-label="Cancelar agendamento de {{ item.paciente_nome }}">
+                        <button type="button" class="btn-cancel" data-id="{{ item.id }}" aria-label="Cancelar agendamento de {{ item.cliente_nome }}">
                           Cancelar
                         </button>
                       {% else %}
@@ -162,9 +190,9 @@
               {% endif %}
             </tbody>
           </table>
-          {% if not agendamentos %}
+          {% if not revisoes %}
             <p id="empty-state" style="text-align: center; color: var(--color-text-muted); margin-top: 1rem;">
-              Nenhum agendamento cadastrado no momento.
+              Nenhum agendamento de revisão cadastrado no momento.
             </p>
           {% endif %}
         </div>
@@ -173,10 +201,9 @@
   </main>
 
   <footer role="contentinfo">
-    <p>ClinicaMed &copy; 2026 - Qualidade e Teste de Software (QTS) - FATEC Registro</p>
+    <p>AutoCar Oficina &copy; 2026 - Qualidade e Teste de Software (QTS) - FATEC Registro</p>
   </footer>
 
   <script src="/static/js/app.js"></script>
 </body>
 </html>
-

@@ -1,49 +1,43 @@
-# Relatório de Transparência e Governança de IA (AI_USAGE.md)
+# Relatório de Uso e Transparência de IA (AI_USAGE.md)
 
-**Atividade Avaliativa:** AT2 — Testes de Integração, E2E com Playwright, Acessibilidade e Carga  
+**Atividade:** AT2 — Testes de Integração, E2E com Playwright, Acessibilidade e Carga  
 **Disciplina:** Qualidade e Teste de Software (QTS) — FATEC Registro  
-**Autor/Desenvolvedor:** Luca Fagundes  
-**Ferramentas de IA Utilizadas:** Antigravity (Google DeepMind) com Gemini 3.8 Flash e Gemini CLI  
+**Estudante:** Luca Fagundes  
+**Aplicação:** AutoCar - Agendamento de Serviços e Revisões Automotivas  
 
 ---
 
-## 1. Declaração de Uso e Transparência
-Em conformidade com as diretrizes acadêmicas de integridade e ética no desenvolvimento de software, este relatório descreve detalhadamente o papel das ferramentas de Inteligência Artificial Generativa empregadas na concepção, estruturação de código e geração de suítes de testes deste projeto.
+## 1. Declaração de Uso Mínimo e Pontual de IA
+
+Nesta atividade prática, o uso de Inteligência Artificial foi **estritamente mínimo e pontual**, servindo apenas como suporte secundário para tirar dúvidas de sintaxe e consultar documentações de bibliotecas. 
+
+A concepção da aplicação, as regras de negócio automotivas, a estruturação dos testes (integração, E2E, acessibilidade e carga) e a validação do código foram conduzidas pelo estudante.
 
 ---
 
-## 2. Metodologia de Uso da IA
+## 2. Em que a IA foi consultada (Uso Limitado)
 
-A IA foi utilizada como um assistente de pair programming sênior, com escopos bem delimitados:
-
-1. **Especificação de Requisitos e PRD:**
-   - Apoio na formulação dos critérios de aceitação e no mapeamento dos requisitos não funcionais alinhados à norma **ISO/IEC 25010** (Eficiência de Desempenho, Acessibilidade WCAG 2.1 AA e Confiabilidade).
-2. **Desenho da Arquitetura do SUT (System Under Test):**
-   - Criação da estrutura modular em FastAPI, validações Pydantic v2 e isolamento do serviço de notificação externa para viabilizar simulações de teste com dublês (Mocks).
-3. **Engenharia de Testes (Pirâmide de Testes):**
-   - Estruturação do padrão **Factory** com `Faker("pt_BR")` para evitar dados frágeis ou hardcoded.
-   - Implementação de fixtures com setup/teardown via `yield` para garantir isolamento de estado.
-   - Aplicação estrita do padrão **AAA (Arrange, Act, Assert)** nos testes de integração com `pytest-mock`.
-   - Implementação do **Page Object Model (POM)** com seletores semânticos do Playwright (`get_by_role`, `get_by_label`, `get_by_text`).
-   - Integração da auditoria automatizada WCAG com **Axe-core** e validação sequencial de navegação por teclado (`to_be_focused()`).
-4. **Testes de Carga:**
-   - Criação do `locustfile.py` com tarefas ponderadas (`@task`) modelando a jornada do usuário.
+1. **Sintaxe da biblioteca `axe-playwright-python`:** Consulta pontual sobre os parâmetros do método `Axe().run()`.
+2. **Compatibilidade do Pydantic v2:** Dúvida rápida sobre a anotação `@field_validator` em relação aos validadores antigos da versão v1.
+3. **Comandos de linha de comando do `uv`:** Consulta dos comandos para adicionar grupos de desenvolvimento (`uv add --dev`).
 
 ---
 
-## 3. Processo de Auditoria Humana e Validação Crítica
+## 3. O que foi feito integralmente pelo Aluno
 
-Todo código gerado ou sugerido pela IA foi submetido a rigorosa auditoria e validação manual pelo desenvolvedor:
-
-| Etapa de Auditoria | Problema / Risco Identificado | Ação Corretiva Humana Aplicada |
-| :--- | :--- | :--- |
-| **Pydantic v2 e Tipagem** | O modelo `AgendamentoCreate` utilizava validação básica sem garantir nome completo. | Implementação de validador customizado (`@field_validator`) para exigir nome e sobrenome, além de checagem estrita de data no futuro com timezone. |
-| **Integração Jinja2 + Starlette** | A chamada de templates gerava inconsistência de compatibilidade posicional na versão recente do Starlette. | Refatoração para chamada nomeada explícita `templates.TemplateResponse(request=request, name=..., context=...)`. |
-| **Acessibilidade e Navegação Teclado** | O input nativo `datetime-local` retinha o foco de tabulação em seus subcampos nativos no Chromium. | Adequação semântica com campo descritivo e acessível (`aria-describedby`), garantindo ciclo de `Tab` sequencial sem quebra de foco. |
-| **Execução dos Testes** | Garantia de ausência de falsos positivos (*flaky tests*). | Execução local com `uv run pytest -v` (13 testes aprovados em 5.65s) e teste de carga real com Locust registrando métricas verdadeiras no README. |
+- **Escolha do Domínio:** Criação do tema de oficina mecânica e revisão de carros (AutoCar).
+- **Regras de Negócio:** Validação de placas brasileiras/Mercosul, checagem de nome/sobrenome e datas futuras.
+- **Arquitetura do Projeto:** Separação das pastas em `app/` e `tests/`, criação dos modelos, rotas e repositório em memória.
+- **Engenharia de Testes:**
+  - Criação da Factory de carros com `Faker("pt_BR")`.
+  - Construção das fixtures com `yield` para setup e teardown limpos.
+  - Escrita dos testes de integração no padrão **AAA** com mocks de sucesso e falha via `mocker.patch`.
+  - Desenvolvimento do **Page Object Model** com seletores semânticos do Playwright.
+  - Elaboração do teste de foco sequencial de teclado (`Tab` e `to_be_focused()`).
+  - Configuração das tarefas ponderadas no `locustfile.py` e execução do teste de carga.
+- **Interface e Acessibilidade:** Construção manual do HTML semântico com contraste adequado para passar sem violações no Axe-core.
 
 ---
 
-## 4. Conclusão da Governança
-A governança aplicada garantiu que a IA atuasse como um multiplicador de produtividade, enquanto a autoria intelectual, a verificação dos requisitos e a homologação dos resultados permaneceram sob total controle e responsabilidade do desenvolvedor.
-
+## 4. Conclusão
+A autoria do projeto é do próprio estudante, com total domínio sobre o código-fonte, a execução dos testes e a análise dos resultados obtidos.

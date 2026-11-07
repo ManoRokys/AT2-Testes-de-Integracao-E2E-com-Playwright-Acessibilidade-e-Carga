@@ -1,57 +1,45 @@
 import threading
 from typing import List, Optional, Dict
-from app.models import AgendamentoResponse, StatusAgendamentoEnum
+from app.models import AgendamentoRevisaoResponse, StatusAgendamentoEnum
 
 
-class AgendamentoRepository:
-    """
-    Repositório thread-safe em memória para persistência de agendamentos.
-    Permite isolamento confiável entre cenários de teste através do método clear().
-    """
+class RevisaoRepository:
+    """Repositório em memória para armazenar os agendamentos de oficina."""
 
     def __init__(self):
-        self._lock = threading.Lock()
-        self._items: Dict[str, AgendamentoResponse] = {}
+        self._trava = threading.Lock()
+        self._dados: Dict[str, AgendamentoRevisaoResponse] = {}
 
-    def create(self, item: AgendamentoResponse) -> AgendamentoResponse:
-        with self._lock:
-            self._items[item.id] = item
-            return item
+    def salvar(self, agendamento: AgendamentoRevisaoResponse) -> AgendamentoRevisaoResponse:
+        with self._trava:
+            self._dados[agendamento.id] = agendamento
+            return agendamento
 
-    def list_all(self) -> List[AgendamentoResponse]:
-        with self._lock:
-            # Retorna ordenado do mais recente para o mais antigo
+    def listar_todos(self) -> List[AgendamentoRevisaoResponse]:
+        with self._trava:
             return sorted(
-                list(self._items.values()),
-                key=lambda x: x.criado_em,
-                reverse=True
+                list(self._dados.values()),
+                key=lambda item: item.criado_em,
+                reverse=True,
             )
 
-    def get_by_id(self, item_id: str) -> Optional[AgendamentoResponse]:
-        with self._lock:
-            return self._items.get(item_id)
+    def buscar_por_id(self, item_id: str) -> Optional[AgendamentoRevisaoResponse]:
+        with self._trava:
+            return self._dados.get(item_id)
 
-    def update_status(self, item_id: str, status: StatusAgendamentoEnum) -> Optional[AgendamentoResponse]:
-        with self._lock:
-            item = self._items.get(item_id)
+    def cancelar(self, item_id: str) -> Optional[AgendamentoRevisaoResponse]:
+        with self._trava:
+            item = self._dados.get(item_id)
             if not item:
                 return None
-            item.status = status
+            item.status = StatusAgendamentoEnum.CANCELADO
+            item.mensagem_status = "Agendamento de revisão cancelado com sucesso."
             return item
 
-    def delete(self, item_id: str) -> bool:
-        with self._lock:
-            if item_id in self._items:
-                del self._items[item_id]
-                return True
-            return False
-
-    def clear(self) -> None:
-        """Limpa o repositório. Utilizado em teardown de fixtures de teste."""
-        with self._lock:
-            self._items.clear()
+    def limpar(self) -> None:
+        """Limpa o repositório entre os testes nas fixtures do pytest."""
+        with self._trava:
+            self._dados.clear()
 
 
-# Instância global singleton do repositório
-repository = AgendamentoRepository()
-
+repo = RevisaoRepository()

@@ -1,51 +1,30 @@
 import random
 from locust import HttpUser, task, between
-from tests.factories.appointment_factory import AgendamentoFactory
+from tests.factories.carro_factory import CarroFactory
 
 
-class ClinicaMedUser(HttpUser):
-    """
-    Simulação de usuário concorrente no sistema ClinicaMed.
-    Modela o comportamento de pacientes e atendentes acessando a interface web,
-    consultando a lista de agendamentos e submetendo novas marcações de consulta.
-    """
-
-    # Intervalo de espera ponderado entre tarefas (1 a 2.5 segundos)
+class UsuarioOficina(HttpUser):
+    # Simula tempo de espera de um usuário navegando (1 a 2.5 segundos)
     wait_time = between(1.0, 2.5)
 
     @task(4)
-    def acessar_pagina_principal(self):
-        """Simula a navegação de um usuário na página inicial da clínica (HTML/CSS)."""
-        with self.client.get("/", catch_response=True) as response:
-            if response.status_code == 200:
-                response.success()
-            else:
-                response.failure(f"Falha ao carregar home: {response.status_code}")
+    def acessar_pagina_oficina(self):
+        """Acessa a home da AutoCar."""
+        self.client.get("/")
 
     @task(3)
-    def listar_consultas_agendadas(self):
-        """Simula a consulta frequente à API de agendamentos."""
-        with self.client.get("/api/agendamentos", catch_response=True) as response:
-            if response.status_code == 200:
-                response.success()
-            else:
-                response.failure(f"Falha ao listar agendamentos: {response.status_code}")
+    def listar_revisoes(self):
+        """Consulta as revisões cadastradas."""
+        self.client.get("/api/revisoes")
 
     @task(2)
-    def criar_novo_agendamento(self):
-        """Simula a submissão de um novo agendamento com dados sintéticos válidos."""
-        payload = AgendamentoFactory.build_valid_payload(
-            dias_a_frente=random.randint(1, 30)
-        )
+    def agendar_servico_carro(self):
+        """Cadastra uma revisão com dados sintéticos válidos."""
+        payload = CarroFactory.payload_valido(dias_a_frente=random.randint(1, 20))
         headers = {"Content-Type": "application/json"}
-        with self.client.post("/api/agendamentos", json=payload, headers=headers, catch_response=True) as response:
-            if response.status_code == 201:
-                response.success()
-            else:
-                response.failure(f"Erro na criação de agendamento: {response.status_code} - {response.text}")
+        self.client.post("/api/revisoes", json=payload, headers=headers)
 
     @task(1)
-    def monitorar_saude_da_api(self):
-        """Simula probes periódicos de health check."""
+    def checar_saude(self):
+        """Checagem rápida da rota de health."""
         self.client.get("/health")
-

@@ -1,44 +1,33 @@
-import logging
 import time
 from typing import Dict, Any
 
-logger = logging.getLogger(__name__)
 
-
-class NotificationDeliveryError(Exception):
-    """Exceção levantada quando a integração externa de notificação falha."""
+class FalhaEnvioNotificacaoError(Exception):
+    """Lançada quando a API externa de mensagens falha (ex: timeout ou fora do ar)."""
     pass
 
 
-class ExternalNotificationClient:
+class NotificacaoService:
     """
-    Cliente de integração com serviço externo de notificações (SMS/E-mail/WhatsApp).
-    Em ambiente de produção, este componente se comunica via HTTP com APIs como SendGrid ou Twilio.
-    Em testes de integração, este serviço é isolado e mockado via pytest-mock (mocker.patch).
+    Serviço externo que simula o disparo de mensagens (SMS/WhatsApp)
+    notificando o cliente sobre o agendamento da revisão do veículo.
     """
 
-    def __init__(self, api_key: str = "live_secret_key_mock"):
-        self.api_key = api_key
+    def __init__(self, api_url: str = "https://api.avisos-oficina.fake/v1"):
+        self.api_url = api_url
 
-    def send_confirmation(
+    def enviar_confirmacao(
         self,
-        paciente_email: str,
-        paciente_nome: str,
-        especialidade: str,
-        data_horario: str
+        cliente_email: str,
+        cliente_nome: str,
+        veiculo_modelo: str,
+        veiculo_placa: str,
+        data_horario: str,
     ) -> Dict[str, Any]:
-        """
-        Dispara a mensagem de confirmação para o paciente.
-        Simula latência de rede e retorno estruturado.
-        """
-        logger.info(
-            f"[NotificationClient] Enviando confirmação para {paciente_email} - Paciente: {paciente_nome}"
-        )
-        # Simulação de envio com sucesso padrão
+        # Simula envio para provedor de mensageria externo
         return {
-            "success": True,
-            "message_id": f"msg_{int(time.time() * 1000)}",
-            "recipient": paciente_email,
-            "status": "DELIVERED"
+            "enviado": True,
+            "id_mensagem": f"msg_oficina_{int(time.time() * 1000)}",
+            "destinatario": cliente_email,
+            "status": "ENTREGUE",
         }
-

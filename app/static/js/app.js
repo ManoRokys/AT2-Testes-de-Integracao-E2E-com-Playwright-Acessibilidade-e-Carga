@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("form-agendamento");
+  const form = document.getElementById("form-revisao");
   const alertBox = document.getElementById("alert-status");
-  const tableBody = document.getElementById("tabela-agendamentos-body");
+  const tableBody = document.getElementById("tabela-revisoes-body");
   const emptyState = document.getElementById("empty-state");
 
   function showAlert(message, type = "success") {
@@ -39,12 +39,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const row = document.createElement("tr");
     row.id = `row-${item.id}`;
     row.innerHTML = `
-      <td><strong>${escapeHtml(item.paciente_nome)}</strong></td>
-      <td>${escapeHtml(item.especialidade)}</td>
+      <td><strong>${escapeHtml(item.cliente_nome)}</strong></td>
+      <td>${escapeHtml(item.veiculo_modelo)} (${escapeHtml(item.veiculo_placa)})</td>
+      <td>${escapeHtml(item.tipo_servico)}</td>
       <td>${formatDateTime(item.data_horario)}</td>
       <td><span class="badge badge-${escapeHtml(item.status)}">${escapeHtml(item.status)}</span></td>
       <td>
-        <button type="button" class="btn-cancel" data-id="${escapeHtml(item.id)}" aria-label="Cancelar agendamento de ${escapeHtml(item.paciente_nome)}">
+        <button type="button" class="btn-cancel" data-id="${escapeHtml(item.id)}" aria-label="Cancelar agendamento de ${escapeHtml(item.cliente_nome)}">
           Cancelar
         </button>
       </td>
@@ -67,33 +68,31 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!btn) return;
     btn.addEventListener("click", async () => {
       const id = btn.getAttribute("data-id");
-      if (!confirm("Deseja realmente cancelar este agendamento?")) {
+      if (!confirm("Deseja cancelar o agendamento desta revisão?")) {
         return;
       }
       try {
-        const response = await fetch(`/api/agendamentos/${id}/cancelar`, {
+        const response = await fetch(`/api/revisoes/${id}/cancelar`, {
           method: "PATCH",
         });
         if (response.ok) {
-          const data = await response.json();
           const row = document.getElementById(`row-${id}`);
           if (row) {
-            const statusCell = row.children[3];
+            const statusCell = row.children[4];
             statusCell.innerHTML = `<span class="badge badge-CANCELADO">CANCELADO</span>`;
             btn.disabled = true;
             btn.textContent = "Cancelado";
           }
-          showAlert("Agendamento cancelado com sucesso.", "success");
+          showAlert("Agendamento de revisão cancelado com sucesso.", "success");
         } else {
           showAlert("Não foi possível cancelar o agendamento.", "error");
         }
       } catch (err) {
-        showAlert("Erro de rede ao cancelar agendamento.", "error");
+        showAlert("Erro ao se comunicar com a oficina.", "error");
       }
     });
   }
 
-  // Attach handlers to existing buttons rendered by Jinja
   document.querySelectorAll(".btn-cancel").forEach(attachCancelHandler);
 
   if (form) {
@@ -101,24 +100,28 @@ document.addEventListener("DOMContentLoaded", () => {
       event.preventDefault();
       hideAlert();
 
-      const nome = document.getElementById("paciente_nome").value.trim();
-      const email = document.getElementById("paciente_email").value.trim();
-      const telefone = document.getElementById("paciente_telefone").value.trim();
-      const especialidade = document.getElementById("especialidade").value;
+      const nome = document.getElementById("cliente_nome").value.trim();
+      const email = document.getElementById("cliente_email").value.trim();
+      const telefone = document.getElementById("cliente_telefone").value.trim();
+      const modelo = document.getElementById("veiculo_modelo").value.trim();
+      const placa = document.getElementById("veiculo_placa").value.trim();
+      const servico = document.getElementById("tipo_servico").value;
       const dataHorario = document.getElementById("data_horario").value;
       const observacoes = document.getElementById("observacoes").value.trim();
 
       const payload = {
-        paciente_nome: nome,
-        paciente_email: email,
-        paciente_telefone: telefone,
-        especialidade: especialidade,
+        cliente_nome: nome,
+        cliente_email: email,
+        cliente_telefone: telefone,
+        veiculo_modelo: modelo,
+        veiculo_placa: placa,
+        tipo_servico: servico,
         data_horario: new Date(dataHorario).toISOString(),
         observacoes: observacoes || null,
       };
 
       try {
-        const response = await fetch("/api/agendamentos", {
+        const response = await fetch("/api/revisoes", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -129,21 +132,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await response.json();
 
         if (response.ok) {
-          showAlert("Agendamento realizado com sucesso!", "success");
+          showAlert("Agendamento de revisão realizado com sucesso!", "success");
           appendRowToTable(data);
           form.reset();
         } else {
-          const errorMsg = data.detail
+          const msg = data.detail
             ? Array.isArray(data.detail)
               ? data.detail.map((e) => e.msg).join(", ")
               : data.detail
-            : "Erro ao processar agendamento.";
-          showAlert(`Erro: ${errorMsg}`, "error");
+            : "Erro ao registrar revisão.";
+          showAlert(`Erro: ${msg}`, "error");
         }
       } catch (err) {
-        showAlert("Falha na conexão com o servidor da clínica.", "error");
+        showAlert("Erro de conexão com o servidor da oficina.", "error");
       }
     });
   }
 });
-

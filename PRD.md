@@ -1,107 +1,74 @@
-# Product Requirements Document (PRD)
-## Sistema: ClinicaMed - Agendamento Inteligente de Consultas Médicas
+# Documento de Requisitos de Produto (PRD)
+## Sistema: AutoCar - Agendamento de Serviços Automotivos e Revisões
 
 **Disciplina:** Qualidade e Teste de Software (QTS) — FATEC Registro  
-**Atividade:** AT2 — Testes de Integração, E2E com Playwright, Acessibilidade e Carga  
 **Autor:** Luca Fagundes  
-**Versão:** 1.0.0  
-**Stack Tecnológica:** Python 3.12+, FastAPI, Pydantic v2, Jinja2, Uv, Pytest, Playwright, Axe-core, Locust  
+**Curso:** Desenvolvimento de Software Multiplataforma  
 
 ---
 
-## 1. Visão Geral do Produto
-O **ClinicaMed** é um sistema web e API REST desenvolvido para automatizar e otimizar o fluxo de agendamento de consultas médicas ambulatoriais. A solução visa proporcionar aos pacientes uma interface web intuitiva e totalmente acessível (WCAG 2.1 AA), enquanto oferece aos atendentes e gestores uma API robusta para integração com sistemas hospitalares e serviços externos de mensageria (SMS/E-mail).
+## 1. Visão Geral
+O **AutoCar** é um sistema web e API REST desenvolvido para facilitar o agendamento de revisões preventivas e manutenções mecânicas em oficinas automotivas. O motorista pode escolher o serviço, informar dados do seu carro (modelo e placa) e receber a confirmação por mensagem externa.
 
 ---
 
-## 2. Especificação das Rotas da API REST
+## 2. Rotas da API REST
 
-A API do ClinicaMed segue as diretrizes RESTful, com payloads em JSON e tipagem estrita validada via Pydantic v2.
-
-### 2.1. `POST /api/agendamentos`
-- **Descrição:** Cria uma nova solicitação de consulta médica e despacha a notificação para o serviço externo de mensageria.
-- **Status HTTP de Sucesso:** `201 Created`
-- **Status HTTP de Erro de Validação:** `422 Unprocessable Entity`
-- **Payload de Requisição:**
+### 2.1. `POST /api/revisoes`
+- **Função:** Cadastra um novo agendamento de revisão para um carro e aciona o serviço de aviso.
+- **Status Sucesso:** `201 Created`
+- **Status Erro de Validação:** `422 Unprocessable Entity`
+- **Payload:**
   ```json
   {
-    "paciente_nome": "Carlos Eduardo de Souza",
-    "paciente_email": "carlos.souza@exemplo.com.br",
-    "paciente_telefone": "(11) 98765-4321",
-    "especialidade": "Cardiologia",
-    "data_horario": "2026-11-20T14:30:00Z",
-    "observacoes": "Primeira consulta para check-up de rotina."
+    "cliente_nome": "Lucas Silva",
+    "cliente_email": "lucas.silva@exemplo.com.br",
+    "cliente_telefone": "(13) 99876-5432",
+    "veiculo_modelo": "Volkswagen Gol 1.6",
+    "veiculo_placa": "BRA2E19",
+    "tipo_servico": "Troca de Óleo",
+    "data_horario": "2026-11-25T09:00:00Z",
+    "observacoes": "Trocar filtro de óleo e checar nível de água."
   }
   ```
-- **Regras de Negócio e Validações:**
-  - `paciente_nome`: obrigatório, mínimo de 3 caracteres, deve conter ao menos nome e sobrenome (validador customizado).
-  - `paciente_email`: obrigatório, formato de e-mail sintaticamente válido (`EmailStr`).
-  - `paciente_telefone`: obrigatório, formato com DDD (mínimo 10 caracteres).
-  - `especialidade`: restrita ao enum: `Clínica Geral`, `Cardiologia`, `Dermatologia`, `Ortopedia`, `Pediatria`.
-  - `data_horario`: obrigatório, deve representar uma data e horário estritamente futuros.
-- **Payload de Resposta (Sucesso):**
-  ```json
-  {
-    "id": "e4f8b91c-14d2-43bb-a320-1a2b3c4d5e6f",
-    "paciente_nome": "Carlos Eduardo de Souza",
-    "paciente_email": "carlos.souza@exemplo.com.br",
-    "paciente_telefone": "(11) 98765-4321",
-    "especialidade": "Cardiologia",
-    "data_horario": "2026-11-20T14:30:00Z",
-    "observacoes": "Primeira consulta para check-up de rotina.",
-    "status": "CONFIRMADO",
-    "notificacao_enviada": true,
-    "mensagem_status": "Agendamento confirmado com sucesso.",
-    "criado_em": "2026-11-07T15:00:00Z"
-  }
-  ```
+- **Validações aplicadas (Pydantic):**
+  - Nome deve ter pelo menos duas palavras (nome e sobrenome).
+  - Placa deve seguir o padrão brasileiro de 7 caracteres (comum ou Mercosul).
+  - Data do agendamento deve ser estritamente no futuro.
 
-### 2.2. `GET /api/agendamentos`
-- **Descrição:** Retorna a listagem de todos os agendamentos cadastrados, com opção de filtro por especialidade.
-- **Status HTTP:** `200 OK`
-- **Query Params:** `especialidade` (opcional).
+### 2.2. `GET /api/revisoes`
+- **Função:** Lista todos os agendamentos cadastrados.
+- **Status:** `200 OK`
 
-### 2.3. `GET /api/agendamentos/{id}`
-- **Descrição:** Obtém os dados completos de um agendamento individual por UUID.
-- **Status HTTP:** `200 OK` ou `404 Not Found`.
+### 2.3. `GET /api/revisoes/{id}`
+- **Função:** Busca os detalhes de uma revisão específica.
+- **Status:** `200 OK` ou `404 Not Found`.
 
-### 2.4. `PATCH /api/agendamentos/{id}/cancelar`
-- **Descrição:** Atualiza o estado da consulta para `CANCELADO`.
-- **Status HTTP:** `200 OK` ou `404 Not Found`.
+### 2.4. `PATCH /api/revisoes/{id}/cancelar`
+- **Função:** Cancela o agendamento de uma revisão.
+- **Status:** `200 OK` ou `404 Not Found`.
 
 ### 2.5. `GET /health`
-- **Descrição:** Endpoint leve de diagnóstico (liveness probe).
-- **Status HTTP:** `200 OK` -> `{"status": "healthy", "service": "ClinicaMed API"}`.
+- **Função:** Rota simples de checagem para testes de carga e monitoramento.
+- **Status:** `200 OK`
 
 ---
 
-## 3. Especificação da Interface Web
-
-A interface web é servida na rota raiz `GET /` e foi projetada com foco total em usabilidade, semântica e acessibilidade universal:
-1. **Estrutura Semântica:** Uso correto de landmarks HTML5 (`<header role="banner">`, `<main id="main-content" role="main">`, `<section aria-labelledby="...">`, `<footer role="contentinfo">`).
-2. **Navegação por Teclado:**
-   - Link de salto rápido (*Skip Link*) oculto visualmente que se torna visível ao receber foco (`:focus`), permitindo ao usuário de teclado ir direto ao formulário principal.
-   - Ordem de tabulação lógica (`tabindex` natural) sem armadilhas de foco (*keyboard traps*).
-   - Estilização clara de `:focus-visible` com anel de foco de alto contraste (3px).
-3. **Formulário Acessível:**
-   - Rótulos explícitos com `<label for="...">` devidamente associados a cada `<input>`, `<select>` e `<textarea>`.
-   - Marcação de campos obrigatórios com `aria-required="true"`.
-   - Textos de ajuda conectados aos inputs via `aria-describedby`.
-4. **Comunicação com Leitores de Tela:**
-   - Região viva dinâmica (`role="status" aria-live="polite"`) que anuncia o resultado das ações de agendamento e cancelamento sem recarregar a tela.
-5. **Tabela de Dados Acessível:**
-   - Elemento `<table>` contendo `<caption>`, cabeçalhos semânticos `<th scope="col">` e botões de ação com `aria-label` descritivo contextualizando o nome do paciente.
+## 3. Interface Web Acessível (`GET /`)
+- HTML5 semântico com navegação por teclado fluida.
+- Suporte a leitor de telas com link de salto rápido (*skip link*).
+- Mensagens de feedback dinâmicas através de `role="status"` e `aria-live="polite"`.
+- Campos de formulário com rótulos explícitos `<label for="...">`.
+- Tabela com listagem dos carros agendados e botão de cancelamento.
 
 ---
 
-## 4. Requisitos Não Funcionais (Conforme ISO/IEC 25010)
+## 4. Requisitos Não Funcionais (ISO/IEC 25010)
 
-| Característica ISO 25010 | Subcaracterística | Requisito Específico e Critério de Aceite |
-| :--- | :--- | :--- |
-| **Adequação Funcional** | Completude e Correção | Todas as regras de negócio (validação de nome com sobrenome, e-mail sintaticamente válido e datas futuras) devem ser validadas e testadas via suíte de testes automatizados com cobertura nas rotas. |
-| **Eficiência de Desempenho** | Comportamento Temporal e Capacidade | Sob carga de 50 usuários concorrentes com Locust, a API deve sustentar um tempo de resposta percentil 95 (p95) inferior a **500 ms** e taxa de falhas igual a **0.00%**. |
-| **Usabilidade** | Acessibilidade (WCAG 2.1 AA) | A página web deve ser auditada pelo motor **Axe-core**, atingindo **0 violações** de severidade crítica ou séria nas regras WCAG 2.1 A e AA. A navegação sequencial por teclado deve ser 100% suportada. |
-| **Confiabilidade** | Tolerância a Falhas e Maturidade | Se a dependência externa de notificação falhar (ex: queda de rede, timeout), a aplicação deve degradar graciosamente: salvar o agendamento como `PENDENTE_NOTIFICACAO` sem falhar com erro 500 para o usuário final. |
-| **Manutenibilidade** | Modularidade e Testabilidade | A arquitetura deve isolar repositório, serviço externo e modelos, implementando padrões de teste estabelecidos: **Page Object Model (POM)** nos testes E2E e **Factory Pattern com Faker pt_BR** para dados sintéticos. |
-| **Compatibilidade** | Coexistência e Interoperabilidade | A aplicação deve operar de forma headless em qualquer ambiente compatível com Python 3.12+ gerenciado via `uv`. |
-
+| Característica | Critério de Aceite |
+| :--- | :--- |
+| **Adequação Funcional** | Validações de nome, placa e datas futuras garantidas por testes automatizados de integração. |
+| **Eficiência de Desempenho** | Sob teste de carga com o Locust, tempo de resposta percentil 95 abaixo de 500 ms e 0% de falhas. |
+| **Usabilidade / Acessibilidade** | Conformidade com WCAG 2.1 AA validada via **Axe-core** (0 violações) e navegação completa por teclado via `Tab`. |
+| **Confiabilidade** | Degradação graciosa: se o serviço externo de mensagem falhar, a revisão é salva como `PENDENTE_AVISO` sem gerar erro 500 para o cliente. |
+| **Manutenibilidade** | Código modular com Factory (`Faker`), Page Object Model no E2E e fixtures com `yield`. |
