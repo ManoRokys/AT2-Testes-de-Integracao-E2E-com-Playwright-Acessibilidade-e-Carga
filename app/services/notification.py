@@ -1,3 +1,8 @@
+"""
+Serviço de envio de notificações externas para confirmação de agendamentos.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import time
 from typing import Dict, Any
 

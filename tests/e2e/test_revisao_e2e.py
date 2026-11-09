@@ -1,3 +1,8 @@
+"""
+Testes End-to-End com Playwright simulando jornada de usuário na oficina AutoCar.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import pytest
 from playwright.sync_api import Page, expect
 

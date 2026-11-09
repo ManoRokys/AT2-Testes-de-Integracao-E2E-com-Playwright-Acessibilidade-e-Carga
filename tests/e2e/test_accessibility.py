@@ -1,3 +1,8 @@
+"""
+Testes de acessibilidade automatizados (Axe-core WCAG 2.1 AA) e navegação por teclado.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import pytest
 from playwright.sync_api import Page, expect
 from axe_playwright_python.sync_playwright import Axe

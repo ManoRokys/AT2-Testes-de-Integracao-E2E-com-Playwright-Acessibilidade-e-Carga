@@ -1,3 +1,8 @@
+"""
+Fixtures compartilhadas para testes com Pytest e Playwright.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import socket
 import threading
 import time

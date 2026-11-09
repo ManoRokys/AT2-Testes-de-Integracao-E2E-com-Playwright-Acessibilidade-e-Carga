@@ -3,7 +3,8 @@
 
 **Disciplina:** Qualidade e Teste de Software (QTS) — FATEC Registro  
 **Autor:** Lucas Gomes Fagundes  
-**Curso:** Desenvolvimento de Software Multiplataforma  
+**Curso:** Desenvolvimento de Software Multiplataforma (DSM)  
+**Semestre:** 2026  
 
 ---
 

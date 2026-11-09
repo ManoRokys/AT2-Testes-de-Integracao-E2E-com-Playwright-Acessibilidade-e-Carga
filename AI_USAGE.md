@@ -41,3 +41,6 @@ A concepção da aplicação, as regras de negócio automotivas, a estruturaçã
 
 ## 4. Conclusão
 A autoria do projeto é do próprio estudante, com total domínio sobre o código-fonte, a execução dos testes e a análise dos resultados obtidos.
+
+---
+*FATEC Registro - 2026 - Lucas Gomes Fagundes*

@@ -1,5 +1,5 @@
 # Regras de Contexto - AutoCar (Oficina Mecânica)
-# Projeto individual de QTS - FATEC Registro
+# Projeto individual de QTS - FATEC Registro - Autor: Lucas Gomes Fagundes
 
 - Stack: Python 3.12+, FastAPI, Pydantic v2, uv, Pytest, Playwright, Axe-core, Locust.
 - Uso de IA no projeto: Mínimo e pontual, focado apenas em suporte a sintaxes específicas de bibliotecas.

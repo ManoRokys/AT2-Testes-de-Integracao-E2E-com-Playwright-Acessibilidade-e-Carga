@@ -1,3 +1,8 @@
+"""
+Factory para geração de massa de dados sintéticos com Faker pt_BR.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import random
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Any, Optional

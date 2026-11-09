@@ -1,3 +1,8 @@
+"""
+Repositório em memória para armazenamento das revisões de veículos.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import threading
 from typing import List, Optional, Dict
 from app.models import AgendamentoRevisaoResponse, StatusAgendamentoEnum

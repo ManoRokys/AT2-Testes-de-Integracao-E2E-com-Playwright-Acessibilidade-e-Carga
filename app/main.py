@@ -1,3 +1,9 @@
+"""
+Aplicação FastAPI - Oficina AutoCar
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+Rotas da API de agendamento de revisões e página web.
+"""
+
 from pathlib import Path
 from typing import List, Optional
 from fastapi import FastAPI, HTTPException, Request, status, Query

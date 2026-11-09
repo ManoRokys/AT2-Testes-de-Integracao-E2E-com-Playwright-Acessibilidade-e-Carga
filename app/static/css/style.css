@@ -1,3 +1,9 @@
+/* 
+  Estilos da AutoCar Oficina Mecânica
+  Foco em acessibilidade WCAG 2.1 AA e alto contraste
+  Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+*/
+
 :root {
   --color-primary: #0f4c81;
   --color-primary-hover: #0a355c;

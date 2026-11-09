@@ -1,3 +1,8 @@
+"""
+Testes de integração das rotas da API AutoCar (padrão AAA e dublês com mocker).
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import pytest
 from fastapi.testclient import TestClient
 

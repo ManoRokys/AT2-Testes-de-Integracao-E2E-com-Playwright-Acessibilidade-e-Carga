@@ -1,3 +1,8 @@
+"""
+Script de teste de carga e desempenho com Locust para a oficina AutoCar.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 import random
 from locust import HttpUser, task, between
 from tests.factories.carro_factory import CarroFactory

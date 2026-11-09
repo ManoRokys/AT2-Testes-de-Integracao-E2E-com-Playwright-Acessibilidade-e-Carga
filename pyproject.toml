@@ -1,10 +1,10 @@
 [project]
 name = "at2-testes-de-integracao-e2e-com-playwright-acessibilidade-e-carga"
 version = "0.1.0"
-description = "ClinicaMed - Sistema de Agendamento Médico com Testes de Integração, E2E Playwright, Acessibilidade WCAG e Carga"
+description = "AutoCar - Sistema de Agendamento e Revisão Automotiva com Testes de Integração, E2E Playwright, Acessibilidade e Carga"
 readme = "README.md"
 authors = [
-    { email = "fagundesluca77@gmail.com" }
+    { name = "Lucas Gomes Fagundes", email = "fagundesluca77@gmail.com" }
 ]
 requires-python = ">=3.12"
 dependencies = [

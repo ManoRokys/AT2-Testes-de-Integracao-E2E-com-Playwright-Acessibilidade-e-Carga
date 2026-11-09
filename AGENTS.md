@@ -1,4 +1,5 @@
 # Diretrizes do Projeto e Contexto de IA (AutoCar)
+**Estudante:** Lucas Gomes Fagundes — FATEC Registro (Disciplina QTS)
 
 Este arquivo documenta as diretrizes do projeto e registra que a atividade foi desenvolvida pelo estudante, com uso da IA apenas para auxílio com sintaxes e consultas rápidas de documentação.
 

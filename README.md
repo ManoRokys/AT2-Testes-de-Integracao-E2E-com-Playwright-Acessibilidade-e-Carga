@@ -2,7 +2,7 @@
 ### Trabalho Prático Individual (AT2) — Qualidade e Teste de Software (QTS)
 **FATEC Registro — Curso de Desenvolvimento de Software Multiplataforma**  
 **Autor:** Lucas Gomes Fagundes  
-**Ambiente:** Python 3.12+ (Python 3.14) gerenciado com `uv`  
+**Ambiente:** Python 3.12+ (executado via `uv`)  
 
 ---
 

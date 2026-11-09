@@ -1,3 +1,8 @@
+"""
+Page Object Model (POM) para a tela de agendamento de revisão.
+Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+"""
+
 from playwright.sync_api import Page, Locator
 
 

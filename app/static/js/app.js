@@ -1,3 +1,6 @@
+// Script da interface web da oficina AutoCar
+// Autor: Lucas Gomes Fagundes (QTS - FATEC Registro)
+
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("form-revisao");
   const alertBox = document.getElementById("alert-status");
