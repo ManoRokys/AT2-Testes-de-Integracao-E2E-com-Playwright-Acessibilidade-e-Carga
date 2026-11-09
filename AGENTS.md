@@ -1,6 +1,6 @@
 # Diretrizes do Projeto e Contexto de IA (AutoCar)
 
-Este arquivo documenta as diretrizes do projeto e registra que a atividade foi desenvolvida pelo estudante, com uso **mínimo e pontual de IA** apenas para auxílio com sintaxes e consultas rápidas de documentação.
+Este arquivo documenta as diretrizes do projeto e registra que a atividade foi desenvolvida pelo estudante, com uso da IA apenas para auxílio com sintaxes e consultas rápidas de documentação.
 
 ---
 
@@ -19,4 +19,4 @@ Este arquivo documenta as diretrizes do projeto e registra que a atividade foi d
 ---
 
 ## 3. Nota sobre o uso de IA
-O design do sistema, as regras de negócio automotivas, os casos de testes e a arquitetura das pastas foram pensados e implementados pelo aluno. A IA não substituiu o raciocínio prático da atividade.
+O design do sistema, as regras de negócio automotivas, os casos de testes e a arquitetura das pastas foram pensados e implementados pelo aluno. 

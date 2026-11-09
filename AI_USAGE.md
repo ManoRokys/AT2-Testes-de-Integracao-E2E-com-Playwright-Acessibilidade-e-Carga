@@ -2,14 +2,14 @@
 
 **Atividade:** AT2 — Testes de Integração, E2E com Playwright, Acessibilidade e Carga  
 **Disciplina:** Qualidade e Teste de Software (QTS) — FATEC Registro  
-**Estudante:** Luca Fagundes  
+**Estudante:** Lucas Gomes Fagundes  
 **Aplicação:** AutoCar - Agendamento de Serviços e Revisões Automotivas  
 
 ---
 
-## 1. Declaração de Uso Mínimo e Pontual de IA
+## 1. Declaração de Uso da IA
 
-Nesta atividade prática, o uso de Inteligência Artificial foi **estritamente mínimo e pontual**, servindo apenas como suporte secundário para tirar dúvidas de sintaxe e consultar documentações de bibliotecas. 
+Nesta atividade prática, o uso de Inteligência Artificial foi estritamente pontual, servindo apenas como suporte secundário para tirar dúvidas de sintaxe e consultar documentações de bibliotecas. 
 
 A concepção da aplicação, as regras de negócio automotivas, a estruturação dos testes (integração, E2E, acessibilidade e carga) e a validação do código foram conduzidas pelo estudante.
 

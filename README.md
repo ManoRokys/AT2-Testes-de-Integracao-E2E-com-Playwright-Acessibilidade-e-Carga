@@ -1,7 +1,7 @@
 # AutoCar - Sistema de Agendamento de Revisão Automotiva
 ### Trabalho Prático Individual (AT2) — Qualidade e Teste de Software (QTS)
 **FATEC Registro — Curso de Desenvolvimento de Software Multiplataforma**  
-**Autor:** Luca Fagundes  
+**Autor:** Lucas Gomes Fagundes  
 **Ambiente:** Python 3.12+ (Python 3.14) gerenciado com `uv`  
 
 ---
@@ -25,7 +25,6 @@ O **AutoCar** é um sistema para agendamento de revisões e manutenções automo
 - 📄 [PRD.md](./PRD.md) — Requisitos do produto, rotas e requisitos não funcionais alinhados à **ISO/IEC 25010**.
 - 📄 [AGENTS.md](./AGENTS.md) / [.cursorrules](./.cursorrules) — Diretrizes de contexto do projeto.
 - 📄 [AI_USAGE.md](./AI_USAGE.md) — Relatório de transparência destacando o **uso mínimo e pontual** de IA no projeto.
-- 📄 [ROTEIRO_GRAVACAO.md](./ROTEIRO_GRAVACAO.md) — Roteiro detalhado com linhas e explicação para a gravação do vídeo de até 4 minutos.
 
 ---
 
@@ -37,7 +36,6 @@ O **AutoCar** é um sistema para agendamento de revisões e manutenções automo
 ├── AI_USAGE.md                    # Relatório de transparência de IA
 ├── PRD.md                         # Requisitos e ISO/IEC 25010
 ├── README.md                      # Instruções de execução e resultados
-├── ROTEIRO_GRAVACAO.md            # Roteiro passo a passo do vídeo (até 4 min)
 ├── locustfile.py                  # Script de teste de carga com Locust
 ├── pyproject.toml                 # Configuração do projeto e pacotes uv
 │
@@ -141,5 +139,5 @@ Resultados obtidos com **40 usuários concorrentes** e taxa de spawn de 10 usuá
 
 ## 7. Itens para Envio da Atividade
 
-1. **Repositório Público no GitHub:** URL deste repositório com todo o código-fonte, testes e documentação.
-2. **Vídeo Demonstrativo de até 4 minutos:** Link do vídeo gravado (YouTube Não Listado, Google Drive ou Loom).
+1. **Repositório Público no GitHub:** [URL deste repositório com todo o código-fonte, testes e documentação.](https://github.com/ManoRokys/AT2-Testes-de-Integracao-E2E-com-Playwright-Acessibilidade-e-Carga/tree/main)
+2. **Vídeo Demonstrativo de até 4 minutos:** [Link do vídeo gravado ](https://youtu.be/pzOy43Biau4)

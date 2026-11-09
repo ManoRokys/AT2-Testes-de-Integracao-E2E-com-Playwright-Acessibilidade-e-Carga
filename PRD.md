@@ -2,7 +2,7 @@
 ## Sistema: AutoCar - Agendamento de Serviços Automotivos e Revisões
 
 **Disciplina:** Qualidade e Teste de Software (QTS) — FATEC Registro  
-**Autor:** Luca Fagundes  
+**Autor:** Lucas Gomes Fagundes  
 **Curso:** Desenvolvimento de Software Multiplataforma  
 
 ---
